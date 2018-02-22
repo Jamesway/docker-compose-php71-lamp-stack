@@ -1,0 +1,94 @@
+# NOTE - THIS IS A DEV COMPOSE FILE!!!!
+version: "2"
+services:
+  php-fpm:
+    #build:
+      #context: .
+      #dockerfile: ./docker/Dockerfile.php71-fpm-xdebug
+    image: jamesway/php71-fpm-xdebug
+    working_dir: /var/www
+    volumes:
+      - app-sync:/var/www:nocopy
+    #env_file: .dev.env
+    environment:
+      - DB_PORT=3306
+      - DB_HOST=mariadb
+      #- DB_PORT=$${DB_PORT} #3306
+      #- DB_HOST=$${DB_HOST} #mariadb
+  php-cli:
+    #build:
+    #  context: .
+    #  dockerfile: ./docker/Dockerfile.php71-cli-composer
+    image: jamesway/php71-cli-dev
+    working_dir: /app
+    volumes:
+      - app-sync:/app:nocopy
+
+  #when changing the service label for php-fpm, update the vhost-dev.conf or nginx fails
+  nginx:
+    #build:
+    #  context: .
+    #  dockerfile: ./docker/Dockerfile.nginx-dev
+    image: nginx:1.12-alpine
+    working_dir: /var/www
+    volumes:
+      - ./nginx_conf:/etc/nginx/conf.d
+      - app-sync:/var/www:nocopy
+    ports:
+      - 8080:80
+
+  mariadb:
+    image: mariadb:10.3
+    #command: mysqld --innodb-buffer-pool-size=20M
+    volumes:
+      - dbdata:/var/lib/mysql
+      #- mariadb-sync:/var/lib/mysql:rw
+    #working_dir: /app/data/mariadb
+    #env_file: .dev.env
+    environment:
+      - MYSQL_DATABASE=homestead
+      - MYSQL_USER=homestead
+      - MYSQL_PASSWORD=secret
+      - MYSQL_ROOT_PASSWORD=secret
+      #- MYSQL_DATABASE=$${MYSQL_DATABASE}
+      #- MYSQL_USER=$${MYSQL_USER}
+      #- MYSQL_PASSWORD=$${MYSQL_PASSWORD}
+      #- MYSQL_ROOT_PASSWORD=$${MYSQL_ROOT_PASSWORD}
+    ports:
+      - 3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    volumes:
+      # nocopy doesn't work here saying this path isn't absolute
+      - /sessions
+    ports:
+      - 8180:80
+    environment:
+      - PMA_ARBITRARY=1
+      #- TESTSUITE_PASSWORD=test123
+    depends_on:
+      - mariadb
+
+  redis:
+    image: redis:3-alpine
+    env_file: .dev.env
+    # https://github.com/docker-library/redis/issues/46#issuecomment-364735991
+    #command: redis-server --requirepass ${REDIS_PASSWORD} --appendonly yes #ENV and .env file vars don't work with "command"
+    command: ["/bin/sh", "-c", "docker-entrypoint.sh --requirepass $${REDIS_PASSWORD}"]
+    ports: ["6379"]
+    volumes:
+      - dbdata:/data
+#      - app-sync:/app:nocopy
+#    # - rdcsrc-sync:/app:rw
+#    working_dir: /app/data/redis
+
+
+# named volumes
+volumes:
+  # external since they're from docker-sync/unison containers
+  app-sync:
+    external: true
+
+  # anonymous volume
+  dbdata:
