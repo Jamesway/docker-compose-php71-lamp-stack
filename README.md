@@ -23,9 +23,9 @@ docker-compose up -d
 
 ## Usage
 
-Laravel http://192.168.99.100:8080/ - http://your-docker-ip:80**80**
+Laravel http://192.168.99.100:8080 - http://your-docker-ip:8080
 
-phpMyAdmin http://192.168.99.100:8081/ - http://your-docker-ip:80**81**
+phpMyAdmin http://192.168.99.100:8081 - http://your-docker-ip:8081
 
 
 ## Notes
