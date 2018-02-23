@@ -3,7 +3,7 @@ I going to use this with Laravel, but the stack works with any or no frameworks.
 
 ## Installation
 
-**Step 1) Install Laravel**
+### **Step 1) Install Laravel**
 
 ```
 In an empty directory...
@@ -11,27 +11,28 @@ In an empty directory...
 docker run --rm -v $(pwd):/app jamesway/php71-cli-dev composer create-project --prefer-dist laravel/laravel .
 ```
 
-**Step 2) Docker-compose**
+### **Step 2) Docker-compose**
 
 Clone this repo and extract the contents to the root directory.
 
 
-**Step 3) Fire up the stack**
+### **Step 3) Append .dev.env to Laravel's .env**
+*Note: .env files with actual secrets, should not be version controlled*
+
+```
+cat .dev.env >> .env
+```
+
+### **Step 4) Fire up the stack**
 ```
 docker-compose up -d
-...
-docker-compose down
 ```
 
-*Note: a cool side benefit of using compose - the flags are baked into the compose file so you can:*
+### **Step 5) Composer dump**
 ```
-docker-compose run --rm [service_name_in_compose]
-docker-compose exec [service_name_in_compose]
-
-eg.
-
 docker-compose run --rm php-cli composer dump-autoload
 ```
+
 
 ## Usage
 
@@ -42,6 +43,25 @@ phpMyAdmin http://192.168.99.100:8081 - http://your-docker-ip:8081
 
 ## Notes
 
-The .dev.env is for development and is ok to keep in version control BUT an .env with actual secrets should NEVER be version controlled.
+OS X and docker-sync - If you find volume syncs are slow, docker-sync is a workaround for the underlying INotify problem on OS X.
+- Install docker sync https://github.com/Jamesway/docker-cheatsheet
+- Enable the docker-sync volume configurations and disable the folder mounts
 
-If no .dev.env, docker-compose expects the environment variables to passed on the command line.
+
+A cool side benefit of using compose - the flags are baked into the compose file so your commands are simpler:
+```
+docker-compose run --rm [service_name_in_compose]
+docker-compose exec [service_name_in_compose]
+
+eg.
+docker run --rm -v $(pwd):/app jamesway/php71-cli-dev composer dump-autoload
+
+vs
+
+docker-compose run --rm php-cli composer dump-autoload
+
+ehh, I guess the docker command in this example isn't so bad
+```
+
+Named volumes persist after their container is removed which makes them ideal for data storage containers.
+When making changes to a service config (eg. mariadb) that uses "dbdata", or if mariadb becomes corrupted, remove the named volume and start fresh before bringing the stack up.
