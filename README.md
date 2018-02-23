@@ -17,7 +17,7 @@ Clone this repo and extract the contents to the root directory.
 
 
 ### **Step 3) Append .dev.env to Laravel's .env**
-*Note: .env files with actual secrets, should not be version controlled*
+*Note: This is for development, but .env files with actual secrets, should NEVER be version controlled.*
 
 ```
 cat .dev.env >> .env
