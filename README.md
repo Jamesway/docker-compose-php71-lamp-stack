@@ -1,5 +1,5 @@
-# Docker-compose - Laravel Development Lamp Stack
-I going to use this with Laravel, but the stack works with any or no frameworks.
+# Docker-compose - Laravel Development Lamp
+I going to use this with Laravel, but it's the same process for any composer installed framework - or no framework.
 
 ## Installation
 
@@ -30,7 +30,7 @@ docker-compose up -d
 
 ### **Step 5) Composer dump**
 ```
-docker-compose run --rm php-cli composer dump-autoload
+docker-compose run --rm jamesway/php71-cli-dev composer dump-autoload
 ```
 
 
@@ -43,11 +43,12 @@ phpMyAdmin http://192.168.99.100:8081 - http://your-docker-ip:8081
 
 ## Notes
 
-OS X and docker-sync - If you find volume syncs are slow, docker-sync is a workaround for the underlying INotify problem on OS X.
+*OS X and docker-sync*
+If you find volume syncs are slow, docker-sync is a workaround for the underlying INotify problem on OS X.
 - Install docker sync https://github.com/Jamesway/docker-cheatsheet
-- Enable the docker-sync volume configurations and disable the folder mounts
+- Rename \_docker-compose-override.yml to docker-compose-override.yml (remove the underscore) to enable the docker-sync compose config.
 
-
+*docker-compose > docker*
 A cool side benefit of using compose - the flags are baked into the compose file so your commands are simpler:
 ```
 docker-compose run --rm [service_name_in_compose]
@@ -58,10 +59,12 @@ docker run --rm -v $(pwd):/app jamesway/php71-cli-dev composer dump-autoload
 
 vs
 
-docker-compose run --rm php-cli composer dump-autoload
+docker-compose run --rm pjamesway/php71-cli-dev dump-autoload
 
-ehh, I guess the docker command in this example isn't so bad
+ehh, I guess the docker command in this example isn't so bad, but let's say you have some ENVs...
 ```
 
+
+*Named Volumes*
 Named volumes persist after their container is removed which makes them ideal for data storage containers.
 When making changes to a service config (eg. mariadb) that uses "dbdata", or if mariadb becomes corrupted, remove the named volume and start fresh before bringing the stack up.
