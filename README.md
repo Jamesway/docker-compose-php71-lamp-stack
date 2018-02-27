@@ -43,14 +43,13 @@ phpMyAdmin http://192.168.99.100:8081 - http://your-docker-ip:8081
 
 ## Notes
 
-**OS X and docker-sync**
-
+**OS X and docker-sync**  
 If you find volume syncs are slow, docker-sync is a workaround for the underlying INotify problem on OS X.
 - Install docker sync https://github.com/Jamesway/docker-cheatsheet
 - Rename \_docker-compose-override.yml to docker-compose-override.yml (remove the underscore) to enable the docker-sync compose config.
 
-**docker-compose > docker**
 
+**docker-compose > docker**  
 A cool side benefit of using compose - the flags are baked into the compose file so your commands are simpler:
 ```
 docker-compose run --rm [service_name_in_compose]
@@ -67,7 +66,6 @@ ehh, I guess the docker command in this example isn't so bad, but let's say you 
 ```
 
 
-**Named Volumes**
- 
+**Named Volumes**  
 Named volumes persist after their container is removed which makes them ideal for data storage containers.
 When making changes to a service config (eg. mariadb) that uses "dbdata", or if mariadb becomes corrupted, remove the named volume and start fresh before bringing the stack up.
