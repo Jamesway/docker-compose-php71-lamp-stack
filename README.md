@@ -8,7 +8,7 @@ I going to use this with Laravel, but it's the same process for any composer ins
 ```
 In an empty directory...
 
-docker run --rm -v $(pwd):/app jamesway/php71-cli-dev composer create-project --prefer-dist laravel/laravel .
+docker run --rm -v $(pwd):/app jamesway/php71-cli composer create-project --prefer-dist laravel/laravel .
 ```
 
 ### **Step 2) Docker-compose**
