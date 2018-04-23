@@ -30,7 +30,7 @@ docker-compose up -d
 
 ### **Step 5) Composer dump**
 ```
-docker-compose run --rm jamesway/php71-cli-dev composer dump-autoload
+docker-compose run --rm jamesway/php71-cli composer dump-autoload
 ```
 
 
@@ -45,7 +45,7 @@ phpMyAdmin http://192.168.99.100:8081 - http://your-docker-ip:8081
 
 ### OS X and docker-sync  
 If you find volume syncs are slow, docker-sync is a workaround for the underlying INotify problem on OS X.
-- Install docker sync https://github.com/Jamesway/docker-cheatsheet
+- Install docker sync https://github.com/jamesway/docker-cheatsheet
 - Rename \_docker-compose-override.yml to docker-compose-override.yml (remove the underscore) to enable the docker-sync compose config.
 
 
@@ -56,11 +56,11 @@ docker-compose run --rm [service_name_in_compose]
 docker-compose exec [service_name_in_compose]
 
 eg.
-docker run --rm -v $(pwd):/app jamesway/php71-cli-dev composer dump-autoload
+docker run --rm -v $(pwd):/app jamesway/php71-cli composer dump-autoload
 
 vs
 
-docker-compose run --rm pjamesway/php71-cli-dev dump-autoload
+docker-compose run --rm jamesway/php71-cli dump-autoload
 
 ehh, I guess the docker command in this example isn't so bad, but let's say you have some ENVs...
 ```
